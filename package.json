@@ -6,7 +6,9 @@
   "dependencies": {
     "chai-http": "^4.3.0",
     "express": "^4.17.1",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "node-pg-migrate": "^5.9.0",
+    "pg": "^8.6.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.16",
@@ -24,7 +26,8 @@
     "build": "tsc",
     "dev": "ts-node-dev --respawn ./src/index.ts",
     "start": "npm run ./dist/index.js",
-    "tests": "NODE_ENV=test mocha --exit true -r ts-node/register ./tests/**/*.test.ts ./tests/mocha.env.ts"
+    "tests": "mocha --exit true -r ts-node/register ./tests/**/*.test.ts ./tests/mocha.env.ts",
+    "migrate": "node-pg-migrate -j ts -m ./src/migrations --tsconfig ./tsconfig.json"
   },
   "author": "",
   "license": "ISC"
