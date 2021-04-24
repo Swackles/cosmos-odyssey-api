@@ -6,11 +6,10 @@ export const shorthands: ColumnDefinitions | undefined = undefined;
 export async function up(pgm: MigrationBuilder): Promise<void> {
   pgm.createTable('routes', {
     id: 'id',
-    name: { type: 'varchar', notNull: true },
     ref: { type: 'varchar', notNull: true },
     leg_ref: { type: 'varchar', notNull: true },
-    dist: { type: 'integer', notNull: true },
-    import_id: {
+    distance: { type: 'bigint', notNull: true },
+    imports_id: {
       type: 'integer',
       notNull: true,
       references: 'imports',

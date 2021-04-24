@@ -2,6 +2,8 @@ import express, { Request, Response } from 'express';
 import path from 'path';
 import logger from 'morgan';
 
+import importTravel from './jobs/importTravelinfo'
+
 const app = express();
 
 // Don't run route logger if running tests
@@ -11,7 +13,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', (req: Request, res: Response) => {
+app.get('/', async (req: Request, res: Response) => {
+  await importTravel();
+
   res.status(200).send("Index page");
 });
 

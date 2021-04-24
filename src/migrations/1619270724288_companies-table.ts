@@ -8,7 +8,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
     id: 'id',
     name: { type: 'varchar', notNull: true },
     ref: { type: 'varchar', notNull: true },
-    import_id: {
+    imports_id: {
       type: 'integer',
       notNull: true,
       references: 'imports',
