@@ -28,10 +28,11 @@ async function index() {
         }).save(client)
       }
     }
-  } catch(err) {
+  } catch (err) {
     await client.query('ROLLBACK') // TODO: Figure out why this doesn't work, neither does it work in tests
     throw err
   } finally {
+    client.query('COMMIT')
     client.release()
   }
 }

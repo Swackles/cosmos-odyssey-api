@@ -19,6 +19,18 @@ class Imports {
     }
   }
 
+  static async findAll(client: PoolClient): Promise<Imports[]> {
+    const res = await client.query('SELECT * FROM imports WHERE deleted_at > $1;', [new Date()])
+
+    let data: Imports[] = []
+
+    for (const row of res.rows) {
+      data.push(new Imports(row))
+    }
+
+    return data;
+  }
+
   async save(client: PoolClient): Promise<Imports> {
     const query = 'INSERT INTO imports (ref, created_at, deleted_at) VALUES( $1, $2, $3) RETURNING *;'
     const params = [this.ref, this.createdAt, this.deletedAt]

@@ -17,8 +17,6 @@ class Routes {
   destId: number
 
   constructor(input: any, ref: References = null) {
-    console.log(input)
-    console.log(ref)
     if (isNaN(input.id)) {
       this.ref = input.id
       this.distance = input.distance
