@@ -55,6 +55,32 @@ describe('Routes model', function () {
       })
     })
   })
+  describe('.findShortestRoute', function () {
+    it('returns route when origin is Earth and destination is jupiter', function (done) {
+      const result = Routes.findShortestRoute('Earth', 'Jupiter')
+      expect(result).to.deep.eq([['Earth', 'Jupiter']])
+
+      done()
+    })
+    it('returns route when origin is Mercury and destination is Neptune', function (done) {
+      const result = Routes.findShortestRoute('Mercury', 'Neptune')
+      expect(result).to.deep.eq([['Mercury', 'Venus', 'Earth', 'Uranus', 'Neptune']])
+
+      done()
+    })
+    it('returns route when origin is Mars and destination is Mercury', function (done) {
+      const result = Routes.findShortestRoute('Mars', 'Mercury')
+      expect(result).to.deep.eq([['Mars', 'Venus', 'Mercury']])
+
+      done()
+    })
+    it('returns route when origin is Saturn and destination is Uranus', function (done) {
+      const result = Routes.findShortestRoute('Saturn', 'Uranus')
+      expect(result).to.deep.eq([['Saturn', 'Earth', 'Uranus'], ['Saturn', 'Neptune', 'Uranus']])
+
+      done()
+    })
+  })
   describe('#save', function() {
     it('inserts to the database', async function () {
       const client = await Pool.connect()
