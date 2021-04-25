@@ -19,6 +19,18 @@ class Planets {
     }
   }
 
+  static async findAll(client: PoolClient): Promise<Planets[]> {
+    const res = await client.query('SELECT DISTINCT ON (planets.name) planets.* FROM planets LEFT JOIN imports ON planets.imports_id = imports.id WHERE imports.deleted_at > CURRENT_TIMESTAMP ORDER BY planets.name;')
+
+    let data: Planets[] = []
+
+    for (const row of res.rows) {
+      data.push(new Planets(row))
+    }
+
+    return data;
+  }
+
   async save(client: PoolClient): Promise<Planets> {
     // Check if already exists in the databse
     let query = 'SELECT * FROM planets WHERE name = $1 AND ref = $2'

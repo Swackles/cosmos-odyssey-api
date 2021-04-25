@@ -20,7 +20,7 @@ class Imports {
   }
 
   static async findAll(client: PoolClient): Promise<Imports[]> {
-    const res = await client.query('SELECT * FROM imports WHERE deleted_at > $1;', [new Date()])
+    const res = await client.query('SELECT * FROM imports WHERE deleted_at > CURRENT_TIMESTAMP;')
 
     let data: Imports[] = []
 
