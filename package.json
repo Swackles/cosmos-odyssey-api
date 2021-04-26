@@ -26,7 +26,7 @@
     "typescript": "^4.2.4"
   },
   "scripts": {
-    "postinstall": "build",
+    "postinstall": "npm run build",
     "build": "tsc",
     "dev": "ts-node-dev --respawn ./src/index.ts",
     "start": "npx node-pg-migrate -m ./dist/migrations up && node ./dist/index.js",
