@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import path from 'path';
 import logger from 'morgan';
 import cors from 'cors'
+import timeout from 'connect-timeout'
 
 import { checkTravelUpdate } from './middlewares'
 import { planetsRoute, priceListingsRoute, reservationsRoute } from './routes'
@@ -12,6 +13,7 @@ const app = express();
 if (process.env.NODE_ENV != 'test') app.use(logger('dev'));
 
 app.use(cors())
+app.use(timeout('5s'))
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
