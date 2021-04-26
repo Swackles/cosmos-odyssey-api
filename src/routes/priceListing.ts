@@ -1,12 +1,17 @@
 import express, { Request, Response } from 'express';
-import { PriceListing, Routes } from '../models';
+import Pool from './../lib/db'
+import { PriceListing } from '../models';
 
 const router = express.Router();
 
 router.get('/', async (req: Request, res: Response) => {
   const filter = req.query as { companyName: string | null, dest: string, origin: string }
+  
+  const client = await Pool.connect()
+  
+  res.send(await PriceListing.save(await PriceListing.findAll(filter), client))
 
-  res.send(await PriceListing.findAll(filter))
+  client.release()
 })
 
 export default router;

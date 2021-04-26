@@ -51,7 +51,6 @@ class Providers {
 
   private static async findNext(path: Providers[], routeId: number, routes: Routes[]): Promise<Providers[][]> {
     const lastProvider = path[path.length - 1]
-    console.log(`path: ${path.map(x => x.id)}; route: ${routes[routeId].id}; startTime: ${lastProvider?.endTime || null}`)
 
     let providers = await routes[routeId].findProviders(lastProvider?.endTime || null)
 
