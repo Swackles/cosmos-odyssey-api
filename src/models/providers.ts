@@ -45,7 +45,7 @@ class Providers {
     }
   }
 
-  static async findProviders(routes: Routes[]): Promise<Providers[][]> {
+  static async findProviders(routes: Routes[], companyName: string): Promise<Providers[][]> {
     return await this.findNext([], 0, routes)
   }
 

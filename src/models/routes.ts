@@ -59,20 +59,25 @@ class Routes {
     return results
   }
   
-  async findProviders(start: Date): Promise<Providers[]> {
+  async findProviders(start: Date, company: string | null = null): Promise<Providers[]> {
     let query = `
       SELECT providers.*, origin.name AS origin, dest.name AS destination, routes.distance AS distance FROM providers
         LEFT JOIN imports ON providers.imports_id = imports.id
         LEFT JOIN routes ON providers.routes_id = routes.id
         LEFT JOIN planets as origin ON routes.origin_id = origin.id
         LEFT JOIN planets as dest ON routes.dest_id = dest.id
+        LEFT JOIN companies ON providers.companies_id = companies.id
       WHERE imports.deleted_at > CURRENT_TIMESTAMP
         AND providers.routes_id = $1`
 
     let params: any[] = [this.id]
     if (start != null) {
-      query += " AND providers.start_time = $2"
+      query += ` AND providers.start_time = $${params.length + 1}`
       params.push(start)
+    }
+    if (company != null) {
+      query += ` AND companies.name LIKE $${params.length + 1}`
+      params.push(`%${company}%`)
     }
 
     const client = await Pool.connect()

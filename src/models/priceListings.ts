@@ -53,12 +53,12 @@ class PriceListings {
       this.endTime = provider.endTime
   }
 
-  static async findAll(filters: Filters)/*: Promise<PriceListings[]>*/ {
+  static async findAll(filters: Filters): Promise<PriceListings[]> {
     const possibleRoutes = await Routes.findRoutes(filters.origin, filters.dest)
     let results: PriceListings[] = []
 
     for (const routes of possibleRoutes) {
-      let providerRoutes = await Providers.findProviders(routes)
+      let providerRoutes = await Providers.findProviders(routes, filters.companyName)
       
       for (const providers of providerRoutes) {
         let pl = new PriceListings(filters.origin, filters.dest);
