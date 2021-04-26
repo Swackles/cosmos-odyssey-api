@@ -10,6 +10,8 @@ async function index(req: Request, res: Response, next: NextFunction) {
   if ((await Imports.findAll(client)).length == 0) await importTravelInfo()
 
   next()
+
+  client.release()
 }
 
 

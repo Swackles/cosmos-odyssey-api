@@ -146,6 +146,7 @@ class Routes {
     const client = await Pool.connect()
 
     const res = await client.query(query, [origin, dest])
+    client.release()
 
     if (res.rows.length > 0)
       return new Routes(res.rows[0])
