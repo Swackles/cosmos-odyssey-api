@@ -5,7 +5,11 @@ import Pool from '../lib/db'
 const router = express.Router();
 
 router.get('/', async (req: Request, res: Response) => {
-  res.send(await Planets.findAll(await Pool.connect()));
+  let client = await Pool.connect()
+
+  res.send(await Planets.findAll(client));
+
+  client.release()
 })
 
 export default router;
