@@ -26,10 +26,10 @@
     "typescript": "^4.2.4"
   },
   "scripts": {
-    "postinstall": "build && npx node-pg-migrate -m ./dist/migrations up",
+    "postinstall": "build",
     "build": "tsc",
     "dev": "ts-node-dev --respawn ./src/index.ts",
-    "start": "node ./dist/index.js",
+    "start": "npx node-pg-migrate -m ./dist/migrations up && node ./dist/index.js",
     "tests": "mocha --exit true -p -t 20000 -r ts-node/register ./tests/**/*.test.ts",
     "migrate": "node-pg-migrate -j ts -m ./src/migrations --tsconfig ./tsconfig.json"
   },
