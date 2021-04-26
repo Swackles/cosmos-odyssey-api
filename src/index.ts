@@ -39,6 +39,6 @@ app.use((err: any, req: Request, res: Response) => {
   }
 });
 
-app.listen(3000);
+app.listen(process.env.PORT || 3000);
 
 export default app;
