@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
-import Pool from './../lib/db'
-import { PriceListing } from '../models';
+import Pool from '../lib/db'
+import { PriceListings } from '../models';
 
 const router = express.Router();
 
@@ -9,7 +9,7 @@ router.get('/', async (req: Request, res: Response) => {
   
   const client = await Pool.connect()
   
-  res.send(await PriceListing.save(await PriceListing.findAll(filter), client))
+  res.send(await PriceListings.save(await PriceListings.findAll(filter), client))
 
   client.release()
 })

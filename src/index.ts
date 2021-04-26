@@ -3,7 +3,7 @@ import path from 'path';
 import logger from 'morgan';
 
 import { checkTravelUpdate } from './middlewares'
-import { planetsRoute, priceListing } from './routes'
+import { planetsRoute, priceListingsRoute, reservationsRoute } from './routes'
 
 const app = express();
 
@@ -16,7 +16,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(checkTravelUpdate)
 
 app.use('/planets', planetsRoute)
-app.use('/priceListing', priceListing)
+app.use('/priceListings', priceListingsRoute)
+app.use('/reservations', reservationsRoute)
 
 // catch 404 and forward to error handler
 app.use((req: Request, res: Response) => { res.status(404).send() });

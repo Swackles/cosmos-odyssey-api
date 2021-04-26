@@ -16,15 +16,28 @@ class PriceListings {
   origin: string
   dest: string
   distance: string
+  deletedAt: Date
 
-  constructor(origin: string, dest: string) {
-    this.origin = origin
-    this.dest = dest
-    this.providers = []
-    this.price = 0
-    this.distance = '0'
-    this.startTime = null
-    this.endTime = null
+  constructor(origin: string | any, dest: string = null) {
+    if (typeof origin === 'string' && dest != null) {
+      this.origin = origin
+      this.dest = dest
+      this.providers = []
+      this.price = 0
+      this.distance = '0'
+      this.startTime = null
+      this.endTime = null
+    } else {
+      this.id = origin.id
+      this.providers = []
+      this.origin = origin.origin
+      this.dest = origin.dest
+      this.price = origin.price
+      this.distance = origin.distance
+      this.startTime = origin.start_time
+      this.endTime = origin.end_time
+      this.deletedAt = origin.deleted_at
+    }
   }
 
   add(provider: Providers) {
@@ -59,7 +72,8 @@ class PriceListings {
   }
 
   static async prune(client: PoolClient) {
-    await client.query('DELETE FROM public.price_listings WHERE id NOT IN(SELECT id FROM price_listings order by id LIMIT 15);')
+    await client.query(`DELETE FROM public.price_listings WHERE id NOT IN(
+      SELECT price_listings.id FROM price_listings LEFT JOIN reservations on reservations.price_listing_id = price_listings.id WHERE reservations.id IS NULL order by id LIMIT 15);`)
   }
 
   static async save(inputs: PriceListings[], client: PoolClient): Promise<PriceListings[]> {
@@ -68,6 +82,40 @@ class PriceListings {
     for (const input of inputs) priceListings.push(await input.save(client))
 
     await PriceListings.prune(client)
+
+    return priceListings
+  }
+
+  static async find(id: number, client: PoolClient): Promise<PriceListings | null> {   
+    const query =  `
+      SELECT MIN(imports.deleted_at) FROM providers
+        LEFT JOIN imports ON providers.imports_id = imports.id
+        WHERE providers.id IN (SELECT providers_id FROM providers_in_price_listings WHERE price_listings_id = price_listings.id)`
+
+    let res = await client.query(`
+      SELECT
+        price_listings.*,
+		    (${query}) as deleted_at
+	    FROM price_listings
+        WHERE (${query}) > CURRENT_TIMESTAMP
+          AND price_listings.id = $1
+        `, [id])
+    if (res.rows.length == 0) return null    
+    
+    let priceListings = new PriceListings(res.rows[0])
+
+    res = await client.query(`
+      SELECT providers.*, origin.name AS origin, dest.name AS destination, routes.distance AS distance FROM providers
+        LEFT JOIN imports ON providers.imports_id = imports.id
+        LEFT JOIN routes ON providers.routes_id = routes.id
+        LEFT JOIN planets as origin ON routes.origin_id = origin.id
+        LEFT JOIN planets as dest ON routes.dest_id = dest.id
+      WHERE imports.deleted_at > CURRENT_TIMESTAMP
+        AND providers.id in (SELECT providers_id FROM providers_in_price_listings WHERE price_listings_id = $1)`, [priceListings.id])
+
+    for (const response of res.rows) {
+      priceListings.providers.push(new Providers(response))
+    }
 
     return priceListings
   }

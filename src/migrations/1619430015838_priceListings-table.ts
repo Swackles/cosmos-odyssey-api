@@ -32,5 +32,6 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
 }
 
 export async function down(pgm: MigrationBuilder): Promise<void> {
+  pgm.dropTable('providers_in_price_listings');
   pgm.dropTable('price_listings');
 }
