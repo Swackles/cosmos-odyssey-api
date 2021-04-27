@@ -17,6 +17,7 @@ class PriceListings {
   dest: string
   distance: string
   deletedAt: Date
+  company: string
 
   constructor(origin: string | any, dest: string = null) {
     if (typeof origin === 'string' && dest != null) {
@@ -37,6 +38,7 @@ class PriceListings {
       this.startTime = origin.start_time
       this.endTime = origin.end_time
       this.deletedAt = origin.deleted_at
+      this.company = origin.company
     }
   }
 
@@ -105,11 +107,12 @@ class PriceListings {
     let priceListings = new PriceListings(res.rows[0])
 
     res = await client.query(`
-      SELECT providers.*, origin.name AS origin, dest.name AS destination, routes.distance AS distance FROM providers
+      SELECT providers.*, origin.name AS origin, dest.name AS destination, routes.distance AS distance, companies.name AS company FROM providers
         LEFT JOIN imports ON providers.imports_id = imports.id
         LEFT JOIN routes ON providers.routes_id = routes.id
         LEFT JOIN planets as origin ON routes.origin_id = origin.id
         LEFT JOIN planets as dest ON routes.dest_id = dest.id
+        LEFT JOIN companies ON companies.id = providers.id
       WHERE imports.deleted_at > CURRENT_TIMESTAMP
         AND providers.id in (SELECT providers_id FROM providers_in_price_listings WHERE price_listings_id = $1)`, [priceListings.id])
 
