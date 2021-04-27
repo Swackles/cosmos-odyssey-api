@@ -61,7 +61,7 @@ class Routes {
   
   async findProviders(start: Date, company: string | null = null): Promise<Providers[]> {
     let query = `
-      SELECT providers.*, origin.name AS origin, dest.name AS destination, routes.distance AS distance companies.name AS companies FROM providers
+      SELECT providers.*, origin.name AS origin, dest.name AS destination, routes.distance AS distance, companies.name AS company FROM providers
         LEFT JOIN imports ON providers.imports_id = imports.id
         LEFT JOIN routes ON providers.routes_id = routes.id
         LEFT JOIN planets as origin ON routes.origin_id = origin.id
@@ -81,7 +81,9 @@ class Routes {
     }
 
     const client = await Pool.connect()
+    console.log('data')
     const res = await client.query(query, params)
+    console.log('data')
     
     const results = []
 
