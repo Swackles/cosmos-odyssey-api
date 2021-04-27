@@ -17,7 +17,6 @@ class PriceListings {
   dest: string
   distance: string
   deletedAt: Date
-  company: string
 
   constructor(origin: string | any, dest: string = null) {
     if (typeof origin === 'string' && dest != null) {
@@ -38,7 +37,6 @@ class PriceListings {
       this.startTime = origin.start_time
       this.endTime = origin.end_time
       this.deletedAt = origin.deleted_at
-      this.company = origin.company
     }
   }
 

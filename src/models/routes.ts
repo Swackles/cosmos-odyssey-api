@@ -19,6 +19,7 @@ class Routes {
   destId: number
   origin: string
   destination: string
+  company: string
 
   constructor(input: any, ref: References = null) {
     if (isNaN(input.id)) {
@@ -39,6 +40,7 @@ class Routes {
       this.destId = input.dest_id
       this.origin = input.origin
       this.destination = input.dest
+      this.company = origin.company
     }
   }
 
