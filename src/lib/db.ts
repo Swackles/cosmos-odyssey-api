@@ -1,10 +1,13 @@
 import { Pool } from "pg"
 
+const params = process.env.DATABASE_URL.match(/postgres:\/\/(.*?):(.*)@(.*?):(.*?)\/(.*?)$/);
+
 const pool = new Pool({
-  user: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_DB,
-  host: process.env.POSTGRES_HOST
-});
+  user: params[1],
+  password: params[2],
+  host: params[3],
+  port: parseInt(params[4]),
+  database: params[5]
+})
 
 export default pool

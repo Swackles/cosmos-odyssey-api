@@ -12,7 +12,7 @@ These params should be defined in a .env file
 | POSTGRES_USER | defines the postgres user |
 | POSTGRES_PASSWORD | defines the postgres password |
 | POSTGRES_DB | Sets the default db |
-| DATABASE_URL | postgresql:\[POSTGRES_USER]:\[POSTGRES_PASSWORD]@localhost:5432/\[POSTGRES_DB] |
+| DATABASE_URL | postgres://\[POSTGRES_USER]:\[POSTGRES_PASSWORD]@localhost:5432/\[POSTGRES_DB] |
 
 ## NPM Scripts
 
