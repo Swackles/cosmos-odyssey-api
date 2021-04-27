@@ -5,7 +5,8 @@ import { PriceListings } from '../models';
 const router = express.Router();
 
 router.get('/', async (req: Request, res: Response) => {
-  const filter = req.query as { companyName: string | null, dest: string, origin: string }
+  const filter = req.query as { company: string | null, dest: string, origin: string }
+  if (filter.dest == null || filter.origin == null) return res.status(400).send({ code: 'REQUIRED_FIELD_EMPTY' })
   
   const client = await Pool.connect()
   

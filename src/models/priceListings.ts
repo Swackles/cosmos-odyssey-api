@@ -2,7 +2,7 @@ import { PoolClient } from 'pg'
 import { Routes, Providers } from './'
 
 interface Filters {
-  companyName: string | null,
+  company: string | null,
   dest: string,
   origin: string
 }
@@ -58,7 +58,7 @@ class PriceListings {
     let results: PriceListings[] = []
 
     for (const routes of possibleRoutes) {
-      let providerRoutes = await Providers.findProviders(routes, filters.companyName)
+      let providerRoutes = await Providers.findProviders(routes, filters.company)
       
       for (const providers of providerRoutes) {
         let pl = new PriceListings(filters.origin, filters.dest);

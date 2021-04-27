@@ -49,13 +49,13 @@ class Providers {
   }
 
   static async findProviders(routes: Routes[], companyName: string): Promise<Providers[][]> {
-    return await this.findNext([], 0, routes)
+    return await this.findNext([], 0, routes, companyName)
   }
 
-  private static async findNext(path: Providers[], routeId: number, routes: Routes[]): Promise<Providers[][]> {
+  private static async findNext(path: Providers[], routeId: number, routes: Routes[], companyName: string): Promise<Providers[][]> {
     const lastProvider = path[path.length - 1]
 
-    let providers = await routes[routeId].findProviders(lastProvider?.endTime || null)
+    let providers = await routes[routeId].findProviders(lastProvider?.endTime || null, companyName)
 
     if (providers.length == 0) return []
 
@@ -64,7 +64,7 @@ class Providers {
     for (const provider of providers) {
       if (routes.length - 1 == routeId) results.push([...path, provider])
       else {
-        const res = await Providers.findNext([...path, provider], routeId + 1, routes)
+        const res = await Providers.findNext([...path, provider], routeId + 1, routes, companyName)
         results = [...results, ...res]
       }
     }
