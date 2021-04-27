@@ -73,15 +73,15 @@ class PriceListings {
 
   static async prune(client: PoolClient) {
     await client.query(`DELETE FROM public.price_listings WHERE id NOT IN(
-      SELECT price_listings.id FROM price_listings LEFT JOIN reservations on reservations.price_listing_id = price_listings.id WHERE reservations.id IS NULL order by id LIMIT 15);`)
+      SELECT price_listings.id FROM price_listings LEFT JOIN reservations on reservations.price_listing_id = price_listings.id WHERE reservations.id IS NULL order by id desc LIMIT 15);`)
   }
 
   static async save(inputs: PriceListings[], client: PoolClient): Promise<PriceListings[]> {
+    await PriceListings.prune(client)
 
     const priceListings: PriceListings[] = []
     for (const input of inputs) priceListings.push(await input.save(client))
 
-    await PriceListings.prune(client)
 
     return priceListings
   }
