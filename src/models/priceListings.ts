@@ -110,7 +110,7 @@ class PriceListings {
         LEFT JOIN routes ON providers.routes_id = routes.id
         LEFT JOIN planets as origin ON routes.origin_id = origin.id
         LEFT JOIN planets as dest ON routes.dest_id = dest.id
-        LEFT JOIN companies ON companies.id = providers.id
+        LEFT JOIN companies ON companies.id = providers.companies_id
       WHERE imports.deleted_at > CURRENT_TIMESTAMP
         AND providers.id in (SELECT providers_id FROM providers_in_price_listings WHERE price_listings_id = $1)`, [priceListings.id])
 
