@@ -40,7 +40,7 @@ class Routes {
       this.destId = input.dest_id
       this.origin = input.origin
       this.destination = input.dest
-      this.company = origin.company
+      this.company = input.company
     }
   }
 
