@@ -19,7 +19,6 @@ class Routes {
   destId: number
   origin: string
   destination: string
-  company: string
 
   constructor(input: any, ref: References = null) {
     if (isNaN(input.id)) {
@@ -40,7 +39,6 @@ class Routes {
       this.destId = input.dest_id
       this.origin = input.origin
       this.destination = input.dest
-      this.company = input.company
     }
   }
 
@@ -63,7 +61,7 @@ class Routes {
   
   async findProviders(start: Date, company: string | null = null): Promise<Providers[]> {
     let query = `
-      SELECT providers.*, origin.name AS origin, dest.name AS destination, routes.distance AS distance FROM providers
+      SELECT providers.*, origin.name AS origin, dest.name AS destination, routes.distance AS distance companies.name AS companies FROM providers
         LEFT JOIN imports ON providers.imports_id = imports.id
         LEFT JOIN routes ON providers.routes_id = routes.id
         LEFT JOIN planets as origin ON routes.origin_id = origin.id

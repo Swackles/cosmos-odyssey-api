@@ -19,6 +19,8 @@ class Providers {
   companiesId: number
   origin: string
   destination: string
+  company: string
+
 
   constructor(input: any, ref: References = null) {
     if (isNaN(input.id)) {
@@ -42,6 +44,7 @@ class Providers {
       this.companiesId = input.companies_id
       this.origin = input.origin
       this.destination = input.destination
+      this.company = input.company
     }
   }
 
