@@ -44,7 +44,7 @@ class PriceListings {
     this.providers.push(provider)
 
     this.distance = (BigInt(this.distance) + BigInt(provider.distance)).toString()
-    this.price += provider.price
+    this.price += parseInt(provider.price.toString());
 
     if (this.startTime == null || this.startTime > provider.startTime)
       this.startTime = provider.startTime
@@ -81,7 +81,6 @@ class PriceListings {
 
     const priceListings: PriceListings[] = []
     for (const input of inputs) priceListings.push(await input.save(client))
-
 
     return priceListings
   }
@@ -166,9 +165,9 @@ class PriceListings {
       let data = []
 
       for (const providerId of providerIds) {
+        if (data.length != 0) query += ', '
         query += `($${data.length + 1}, $${data.length + 2})`
-        data.push(this.id)
-        data.push(providerId)
+        data.push(...[this.id, providerId])
       }
 
       await client.query(query, data)

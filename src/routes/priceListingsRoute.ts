@@ -9,8 +9,8 @@ router.get('/', async (req: Request, res: Response) => {
   if (filter.dest == null || filter.origin == null) return res.status(400).send({ code: 'REQUIRED_FIELD_EMPTY' })
   
   const client = await Pool.connect()
-  
-  res.send(await PriceListings.save(await PriceListings.findAll(filter), client))
+
+  res.send(await PriceListings.save(await PriceListings.findAll(filter), client));
 
   client.release()
 })

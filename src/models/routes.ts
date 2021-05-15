@@ -72,7 +72,7 @@ class Routes {
 
     let params: any[] = [this.id]
     if (start != null) {
-      query += ` AND providers.start_time = $${params.length + 1}`
+      query += ` AND providers.start_time > $${params.length + 1}`
       params.push(start)
     }
     if (company != null) {
@@ -81,9 +81,7 @@ class Routes {
     }
 
     const client = await Pool.connect()
-    console.log('data')
     const res = await client.query(query, params)
-    console.log('data')
     
     const results = []
 
